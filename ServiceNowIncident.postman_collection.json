@@ -1,0 +1,329 @@
+{
+	"info": {
+		"_postman_id": "abfb36c8-94c8-4535-ae82-e56b754214d4",
+		"name": "ServiceNowIncident",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25052800"
+	},
+	"item": [
+		{
+			"name": "CreateIncident",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"Resp = pm.response.json();\r",
+							"pm.globals.set(\"systemid\",Resp.result.sys_id);\r",
+							"console.log(\"sys_id\" +Resp.result.sys_id);\r",
+							"pm.collectionVariables.set(\"priority\", +Resp.result.priority);\r",
+							"console.log(\"priority\" +Resp.result.priority);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"short_description\":\"My Windows in not working\",\"description\":\"System is not booting\",\"calendar_duration\":\"2020-12-28 01:12:25\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://dev142770.service-now.com/api/now/table/incident",
+					"protocol": "https",
+					"host": [
+						"dev142770",
+						"service-now",
+						"com"
+					],
+					"path": [
+						"api",
+						"now",
+						"table",
+						"incident"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetIncident",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([200,201]);\r",
+							"});\r",
+							"Resp = pm.response.json();\r",
+							"pm.globals.set(\"systemid\",Resp.result.sys_id);\r",
+							"console.log(\"sys_id\" +Resp.result.sys_id);\r",
+							"pm.collectionVariables.set(\"priority\", +Resp.result.priority);\r",
+							"console.log(\"priority\" +Resp.result.priority);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "https://dev142770.service-now.com/api/now/table/incident/{{systemid}}?sysparm_fields=priority%2Cshort_description%2Csys_id",
+					"protocol": "https",
+					"host": [
+						"dev142770",
+						"service-now",
+						"com"
+					],
+					"path": [
+						"api",
+						"now",
+						"table",
+						"incident",
+						"{{systemid}}"
+					],
+					"query": [
+						{
+							"key": "sysparm_display_value",
+							"value": "all",
+							"disabled": true
+						},
+						{
+							"key": "sysparm_exclude_reference_link",
+							"value": "True",
+							"disabled": true
+						},
+						{
+							"key": "sysparm_query_no_domain",
+							"value": "True",
+							"disabled": true
+						},
+						{
+							"key": "sysparm_fields",
+							"value": "priority%2Cshort_description%2Csys_id"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UpdateIncidentWithQueryParams",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"Resp = pm.response.json();\r",
+							"pm.globals.set(\"systemid\",Resp.result.sys_id.display_value);\r",
+							"console.log(\"sys_id\" +Resp.result.sys_id.display_value);\r",
+							"pm.collectionVariables.set(\"priority\", +Resp.result.priority.display_value);\r",
+							"console.log(\"priority\" +Resp.result.priority.display_value);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"short_description\":\"PUT update request for System not working\",\"urgency\":\"2\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://dev142770.service-now.com/api/now/table/incident/{{systemid}}?sysparm_fields=priority%2Cshort_description%2Csys_id&sysparm_display_value=all",
+					"protocol": "https",
+					"host": [
+						"dev142770",
+						"service-now",
+						"com"
+					],
+					"path": [
+						"api",
+						"now",
+						"table",
+						"incident",
+						"{{systemid}}"
+					],
+					"query": [
+						{
+							"key": "sysparm_fields",
+							"value": "priority%2Cshort_description%2Csys_id"
+						},
+						{
+							"key": "sysparm_display_value",
+							"value": "all"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DeleteRequest",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://dev142770.service-now.com/api/now/table/incident/84cf2e652f40e11093ad28a62799b6b2",
+					"protocol": "https",
+					"host": [
+						"dev142770",
+						"service-now",
+						"com"
+					],
+					"path": [
+						"api",
+						"now",
+						"table",
+						"incident",
+						"84cf2e652f40e11093ad28a62799b6b2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PatchRequest",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"Resp = pm.response.json();\r",
+							"pm.globals.set(\"systemid\",Resp.result.sys_id);\r",
+							"console.log(\"sys_id\" +Resp.result.sys_id);\r",
+							"pm.collectionVariables.set(\"priority\", +Resp.result.priority);\r",
+							"console.log(\"priority\" +Resp.result.priority);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"short_description\":\"PATCH update for system not working\",\"urgency\":\"1\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://dev142770.service-now.com/api/now/table/incident//9668b16d2f8ca11093ad28a62799b6c0",
+					"protocol": "https",
+					"host": [
+						"dev142770",
+						"service-now",
+						"com"
+					],
+					"path": [
+						"api",
+						"now",
+						"table",
+						"incident",
+						"",
+						"9668b16d2f8ca11093ad28a62799b6c0"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "basic",
+		"basic": [
+			{
+				"key": "password",
+				"value": "Cz*tn1U0vS!V",
+				"type": "string"
+			},
+			{
+				"key": "username",
+				"value": "admin",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "priority",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
